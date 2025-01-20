@@ -1,0 +1,108 @@
+@model IEnumerable<TaskManager.Models.Tarefa>
+
+@{
+    ViewData["Title"] = "Todas as Tarefas";
+}
+
+<h2>Minhas Tarefas</h2>
+
+<hr />
+<br />
+
+<!-- Formulários de Pesquisa -->
+<div>
+    <!-- Formulário para buscar por Título -->
+    <form asp-action="ObterPorTitulo" method="get">
+        <div class="form-group">
+            <label for="titulo">Buscar por Título:</label>
+            <input type="text" id="titulo" name="titulo" class="form-control" value="@ViewData["CurrentTitulo"]" />
+        </div>
+        <br>
+        <button type="submit" class="btn btn-primary">Buscar</button>
+    </form>
+
+    <br>
+
+    <!-- Formulário para buscar por Data -->
+    <form asp-action="ObterPorData" method="get">
+        <div class="form-group">
+            <label for="data">Buscar por Data:</label>
+            <input type="date" id="data" name="data" class="form-control" value="@ViewData["CurrentData"]" />
+        </div>
+        <br>
+        <button type="submit" class="btn btn-primary">Buscar</button>
+    </form>
+    <br />
+
+    <form asp-action="ObterPorStatus" method="get">
+        <div class="form-group">
+            <label for="status">Buscar por Status:</label>
+            <select id="status" name="status" class="form-control"
+                asp-items="Html.GetEnumSelectList<EnumStatusTarefa>()">
+                <option value="">Selecione um status</option>
+            </select>
+        </div>
+        <br>
+        <button type="submit" class="btn btn-primary">Buscar</button>
+    </form>
+
+</div>
+
+@if (!string.IsNullOrEmpty(ViewData["ErrorMessage"]?.ToString()))
+{
+    <div class="alert alert-warning" role="alert">
+        @ViewData["ErrorMessage"]
+    </div>
+}
+
+<br />
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Titulo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Data)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Descricao)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(Model => item.Id)
+                </td>
+                <td>
+                    @Html.DisplayFor(Model => item.Titulo)
+                </td>
+                <td>
+                    @Html.DisplayFor(Model => item.Data)
+                </td>
+                <td>
+                    @Html.DisplayFor(Model => item.Descricao)
+                </td>
+                <td>
+                    @Html.DisplayFor(Model => item.Status)
+                </td>
+                <td>
+                    <a asp-action="Editar" asp-route-id="@item.Id">Editar</a> |
+                    <a asp-action="Detalhar" asp-route-id="@item.Id">Detalhes</a> |
+                    <a asp-action="Deletar" asp-route-id="@item.Id">Deletar</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
